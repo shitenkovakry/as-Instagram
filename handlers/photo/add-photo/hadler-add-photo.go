@@ -22,6 +22,12 @@ type HandlerForAddPhoto struct {
 }
 
 func (handler *HandlerForAddPhoto) prepareRequest(request *http.Request) (*models.Photo, error) {
+	defer func() {
+		if err := request.Body.Close(); err != nil {
+			handler.log.Printf("cannot close body: %v", err)
+		}
+	}()
+
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		handler.log.Printf("cannot read body: %v", err)

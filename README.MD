@@ -40,3 +40,9 @@ curl -i -X POST \
   --data-binary '{"user_id": 1}' \
   http://localhost:8080/api/v1/addPhoto
 ```
+In order to update name of user, do this:
+```
+curl -i -X PUT \
+  --data-binary '{"user_id": 1, "new name":"kry"}' \
+  http://localhost:8080/api/v1/updateUser
+```

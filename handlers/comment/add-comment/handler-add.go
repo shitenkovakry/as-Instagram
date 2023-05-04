@@ -25,6 +25,12 @@ type HandlerForAddComment struct {
 }
 
 func (handler *HandlerForAddComment) prepareRequest(request *http.Request) (*models.Comment, error) {
+	defer func() {
+		if err := request.Body.Close(); err != nil {
+			handler.log.Printf("cannot close body: %v", err)
+		}
+	}()
+
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		handler.log.Printf("cannot read body: %v", err)

@@ -65,7 +65,7 @@ func (comments *СommentsManager) findCommentByFilter(filter *bson.M) (*models3.
 }
 
 func (comments *СommentsManager) InsertForComment(commentOfUser *models3.Comment) (*models3.Comment, error) {
-	collectionPhotos := comments.db.Collection(commentsCollection)
+	collectionComments := comments.db.Collection(commentsCollection)
 
 	nextID, err := comments.obtainNextIDForComment()
 	if err != nil {
@@ -76,7 +76,7 @@ func (comments *СommentsManager) InsertForComment(commentOfUser *models3.Commen
 
 	opts := options.InsertOne()
 
-	result, err := collectionPhotos.InsertOne(context.Background(), commentOfUser, opts)
+	result, err := collectionComments.InsertOne(context.Background(), commentOfUser, opts)
 	if err != nil {
 		return nil, errors.Wrap(err, "can not insert comment")
 	}

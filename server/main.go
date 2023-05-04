@@ -13,6 +13,7 @@ import (
 	users "instagram/datasource/managers/users"
 	"instagram/datasource/mongo"
 	handler_add "instagram/handlers/comment/add-comment"
+	handler_add_photo "instagram/handlers/photo/add-photo"
 	handler_read "instagram/handlers/photo/read-photo"
 	handler_create "instagram/handlers/user/create"
 	"instagram/logger"
@@ -44,6 +45,8 @@ func main() {
 	router.Method(http.MethodGet, "/api/v1/photos", handlerReadPhotos)
 	handlerAddComment := handler_add.NewHandlerForAddComment(log, commentsManager)
 	router.Method(http.MethodPost, "/api/v1/addComment", handlerAddComment)
+	handlerAddPhoto := handler_add_photo.NewHandlerForAddPhoto(log, photosManager)
+	router.Method(http.MethodPost, "/api/v1/addPhoto", handlerAddPhoto)
 
 	server := NewServer(addr, router)
 

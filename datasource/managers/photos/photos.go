@@ -9,6 +9,7 @@ import (
 
 type DB interface {
 	Read() (models.Photos, error)
+	InsertForPhoto(photoOfUser *models.Photo) (*models.Photo, error)
 }
 
 type PhotosManager struct {
@@ -30,4 +31,13 @@ func (photos *PhotosManager) Read() (models.Photos, error) {
 	}
 
 	return read, nil
+}
+
+func (photo *PhotosManager) Add(photoOfUser *models.Photo) (*models.Photo, error) {
+	insertedPhoto, err := photo.db.InsertForPhoto(photoOfUser)
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot add photo")
+	}
+
+	return insertedPhoto, nil
 }

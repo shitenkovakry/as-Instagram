@@ -46,3 +46,10 @@ curl -i -X PUT \
   --data-binary '{"user_id": 1, "new name":"kry"}' \
   http://localhost:8080/api/v1/updateUser
 ```
+
+In order to delete comment, do this:
+```
+curl -i -X DELETE \
+  --data-binary '{"comment_id": 1, }' \
+  http://localhost:8080/api/v1/deleteComment
+```

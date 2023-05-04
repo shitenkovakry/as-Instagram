@@ -92,3 +92,22 @@ func (comments *СommentsManager) InsertForComment(commentOfUser *models3.Commen
 
 	return insertedComment, nil
 }
+
+func (comments *СommentsManager) DeleteComment(commentID int) (*models3.Comment, error) {
+	collectionComments := comments.db.Collection(commentsCollection)
+
+	filter := &bson.M{
+		"comment_id": commentID,
+	}
+
+	deletedComment, err := comments.findCommentByFilter(filter)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not find deleted comment")
+	}
+
+	if _, err := collectionComments.DeleteOne(context.Background(), filter); err != nil {
+		return nil, errors.Wrap(err, "can not delete comment")
+	}
+
+	return deletedComment, nil
+}

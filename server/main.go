@@ -13,6 +13,7 @@ import (
 	users "instagram/datasource/managers/users"
 	"instagram/datasource/mongo"
 	handler_add "instagram/handlers/comment/add-comment"
+	handler_delete_comment "instagram/handlers/comment/delete-comment"
 	handler_add_photo "instagram/handlers/photo/add-photo"
 	handler_read "instagram/handlers/photo/read-photo"
 	handler_create "instagram/handlers/user/create"
@@ -52,6 +53,8 @@ func main() {
 
 	handlerAddComment := handler_add.NewHandlerForAddComment(log, commentsManager)
 	router.Method(http.MethodPost, "/api/v1/addComment", handlerAddComment)
+	handlerDeleteComment := handler_delete_comment.NewHandlerForDeleteComment(log, commentsManager)
+	router.Method(http.MethodDelete, "/api/v1/deleteComment", handlerDeleteComment)
 
 	server := NewServer(addr, router)
 

@@ -9,6 +9,7 @@ import (
 
 type DB interface {
 	InsertForComment(commentOfUser *models.Comment) (*models.Comment, error)
+	DeleteComment(commentID int) (*models.Comment, error)
 }
 
 type CommentsManager struct {
@@ -30,4 +31,13 @@ func (comment *CommentsManager) Add(commentOfUser *models.Comment) (*models.Comm
 	}
 
 	return insertedComment, nil
+}
+
+func (comment *CommentsManager) Delete(commentID int) (*models.Comment, error) {
+	deletedComment, err := comment.db.DeleteComment(commentID)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not delete comment")
+	}
+
+	return deletedComment, nil
 }

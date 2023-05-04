@@ -33,3 +33,10 @@ curl -i -X POST \
   --data-binary '{"user_id": 1,"photo_id":1, "comment":"this is so ugly photo" }' \
   http://localhost:8080/api/v1/addComment
 ```
+
+In order to add photo, do this:
+```
+curl -i -X POST \
+  --data-binary '{"user_id": 1}' \
+  http://localhost:8080/api/v1/addPhoto
+```

@@ -16,40 +16,39 @@ In order to create user, do this:
 ```
 curl -i -X POST \
   --data-binary '{"name": "ondrys","email": "rianby64@mail.ru"}' \
-  http://localhost:8080/api/v1/createUser
+  http://localhost:8080/api/v1/users/register
 ```
 
 In order to read photos, do this:
 
 ```
 curl -i -X GET \
-  --data-binary '{}' \
-  http://localhost:8080//api/v1/photos
+  http://localhost:8080/api/v1/photos
 ```
 
 In order to add comment, do this:
 ```
 curl -i -X POST \
-  --data-binary '{"user_id": 1,"photo_id":1, "comment":"this is so ugly photo" }' \
-  http://localhost:8080/api/v1/addComment
+  --data-binary '{"user_id": 1,"photo_id":1, "comment":"this is so ugly photo"}' \
+  http://localhost:8080/api/v1/comments/add
 ```
 
 In order to add photo, do this:
 ```
 curl -i -X POST \
   --data-binary '{"user_id": 1}' \
-  http://localhost:8080/api/v1/addPhoto
+  http://localhost:8080/api/v1/photos/add
 ```
 In order to update name of user, do this:
 ```
 curl -i -X PUT \
   --data-binary '{"user_id": 1, "new name":"kry"}' \
-  http://localhost:8080/api/v1/updateUser
+  http://localhost:8080/api/v1/users/update
 ```
 
 In order to delete comment, do this:
 ```
 curl -i -X DELETE \
-  --data-binary '{"comment_id": 1, }' \
-  http://localhost:8080/api/v1/deleteComment
+  --data-binary '{"comment_id": 1}' \
+  http://localhost:8080/api/v1/comments/delete
 ```

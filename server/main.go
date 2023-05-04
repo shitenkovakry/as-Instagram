@@ -42,19 +42,19 @@ func main() {
 	commentsManager := comments.New(log, commentsDB)
 
 	handlerForCreateUser := handler_create.NewHandlerForCreateUser(log, usersManager)
-	router.Method(http.MethodPost, "/api/v1/createUser", handlerForCreateUser)
+	router.Method(http.MethodPost, "/api/v1/users/register", handlerForCreateUser)
 	handlerForUpdateUser := handler_update_user.NewHandlerForUpdateUserByName(log, usersManager)
-	router.Method(http.MethodPut, "/api/v1/updateUser", handlerForUpdateUser)
+	router.Method(http.MethodPut, "/api/v1/users/update", handlerForUpdateUser)
 
 	handlerReadPhotos := handler_read.NewHandlerForReadPhoto(log, photosManager)
 	router.Method(http.MethodGet, "/api/v1/photos", handlerReadPhotos)
 	handlerAddPhoto := handler_add_photo.NewHandlerForAddPhoto(log, photosManager)
-	router.Method(http.MethodPost, "/api/v1/addPhoto", handlerAddPhoto)
+	router.Method(http.MethodPost, "/api/v1/photos/add", handlerAddPhoto)
 
 	handlerAddComment := handler_add.NewHandlerForAddComment(log, commentsManager)
-	router.Method(http.MethodPost, "/api/v1/addComment", handlerAddComment)
+	router.Method(http.MethodPost, "/api/v1/comments/add", handlerAddComment)
 	handlerDeleteComment := handler_delete_comment.NewHandlerForDeleteComment(log, commentsManager)
-	router.Method(http.MethodDelete, "/api/v1/deleteComment", handlerDeleteComment)
+	router.Method(http.MethodDelete, "/api/v1/comments/delete", handlerDeleteComment)
 
 	server := NewServer(addr, router)
 

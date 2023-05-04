@@ -43,7 +43,7 @@ func main() {
 	handlerReadPhotos := handler_read.NewHandlerForReadPhoto(log, photosManager)
 	router.Method(http.MethodGet, "/api/v1/photos", handlerReadPhotos)
 	handlerAddComment := handler_add.NewHandlerForAddComment(log, commentsManager)
-	router.Method(http.MethodPost, "/api/v1/comment", handlerAddComment)
+	router.Method(http.MethodPost, "/api/v1/addComment", handlerAddComment)
 
 	server := NewServer(addr, router)
 

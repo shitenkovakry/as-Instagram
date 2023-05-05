@@ -110,3 +110,22 @@ func (photos *PhotosManager) InsertForPhoto(photoOfUser *models.Photo) (*models.
 
 	return insertedPhoto, nil
 }
+
+func (photos *PhotosManager) DeletePhoto(photoID int) (*models.Photo, error) {
+	collectionPhotos := photos.db.Collection(photosCollection)
+
+	filter := &bson.M{
+		"photo_id": photoID,
+	}
+
+	deletedPhoto, err := photos.findPhotoByFilter(filter)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not find deleted photo")
+	}
+
+	if _, err := collectionPhotos.DeleteOne(context.Background(), filter); err != nil {
+		return nil, errors.Wrap(err, "can not delete photo")
+	}
+
+	return deletedPhoto, nil
+}

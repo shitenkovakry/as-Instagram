@@ -10,6 +10,7 @@ import (
 type DB interface {
 	Read() (models.Photos, error)
 	InsertForPhoto(photoOfUser *models.Photo) (*models.Photo, error)
+	DeletePhoto(photoID int) (*models.Photo, error)
 }
 
 type PhotosManager struct {
@@ -40,4 +41,13 @@ func (photo *PhotosManager) Add(photoOfUser *models.Photo) (*models.Photo, error
 	}
 
 	return insertedPhoto, nil
+}
+
+func (photo *PhotosManager) Delete(photoID int) (*models.Photo, error) {
+	deletedPhoto, err := photo.db.DeletePhoto(photoID)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not delete photo")
+	}
+
+	return deletedPhoto, nil
 }

@@ -59,3 +59,10 @@ curl -i -X PUT \
   --data-binary '{"user_id": 1, "new email":"kry@mail.ru"}' \
   http://localhost:8080/api/v1/users/update/email
 ```
+
+In order to delete user, do this:
+```
+curl -i -X DELETE \
+  --data-binary '{"user_id": 1}' \
+  http://localhost:8080/api/v1/users/delete
+```

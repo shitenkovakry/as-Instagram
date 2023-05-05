@@ -11,6 +11,7 @@ type DB interface {
 	Insert(user *models.UserRegistration) (*models.UserRegistration, error)
 	UpdateName(userID int, newName string) (*models.UserRegistration, error)
 	UpdateEmail(userID int, newEmail string) (*models.UserRegistration, error)
+	DeleteUser(userID int) (*models.UserRegistration, error)
 }
 
 type UsersManager struct {
@@ -50,4 +51,13 @@ func (user *UsersManager) UpdateByEmail(userID int, newEmail string) (*models.Us
 	}
 
 	return updatedEmail, nil
+}
+
+func (user *UsersManager) Delete(userID int) (*models.UserRegistration, error) {
+	deletedUser, err := user.db.DeleteUser(userID)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not delete user")
+	}
+
+	return deletedUser, nil
 }

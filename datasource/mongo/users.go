@@ -144,3 +144,22 @@ func (users *UsersManager) UpdateEmail(userID int, newEmail string) (*models.Use
 
 	return updatedUser, nil
 }
+
+func (users *UsersManager) DeleteUser(userID int) (*models.UserRegistration, error) {
+	collectionUsers := users.db.Collection(usersCollection)
+
+	filter := &bson.M{
+		"user_id": userID,
+	}
+
+	deletedUser, err := users.findUserByFilter(filter)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not find deleted user")
+	}
+
+	if _, err := collectionUsers.DeleteOne(context.Background(), filter); err != nil {
+		return nil, errors.Wrap(err, "can not delete user")
+	}
+
+	return deletedUser, nil
+}

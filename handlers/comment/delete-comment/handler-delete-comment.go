@@ -14,13 +14,13 @@ type DeleteComment struct {
 	IdComment int `json:"comment_id"`
 }
 
-type CommentrActionsForHandlerDeleteComment interface {
+type CommentActionsForHandlerDeleteComment interface {
 	Delete(commentID int) (*models.Comment, error)
 }
 
 type HandlerForDeleteComment struct {
 	log            logger.Logger
-	commentActions CommentrActionsForHandlerDeleteComment
+	commentActions CommentActionsForHandlerDeleteComment
 }
 
 func (handler *HandlerForDeleteComment) prepareRequest(request *http.Request) (*models.Comment, error) {
@@ -95,7 +95,7 @@ func (handler *HandlerForDeleteComment) ServeHTTP(writer http.ResponseWriter, re
 	handler.sendResponse(writer, deletedComment)
 }
 
-func NewHandlerForDeleteComment(log logger.Logger, commentActions CommentrActionsForHandlerDeleteComment) *HandlerForDeleteComment {
+func NewHandlerForDeleteComment(log logger.Logger, commentActions CommentActionsForHandlerDeleteComment) *HandlerForDeleteComment {
 	result := &HandlerForDeleteComment{
 		log:            log,
 		commentActions: commentActions,

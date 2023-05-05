@@ -14,7 +14,7 @@ type UpdateUserByName struct {
 }
 
 type UserActionsForHandlerUpdateUserByName interface {
-	Update(userID int, newName string) (*models.UserRegistration, error)
+	UpdateByName(userID int, newName string) (*models.UserRegistration, error)
 }
 
 type HandlerForUpdateName struct {
@@ -78,7 +78,7 @@ func (handler *HandlerForUpdateName) ServeHTTP(writer http.ResponseWriter, reque
 		return
 	}
 
-	updatedName, err := handler.userActions.Update(shouldUpdateName.ID, shouldUpdateName.Name)
+	updatedName, err := handler.userActions.UpdateByName(shouldUpdateName.ID, shouldUpdateName.Name)
 	if err != nil {
 		handler.log.Printf("cannot update name: %v", err)
 		writer.WriteHeader(http.StatusInternalServerError)

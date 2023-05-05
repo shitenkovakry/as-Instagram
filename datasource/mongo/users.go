@@ -93,7 +93,7 @@ func (users *UsersManager) Insert(user *models.UserRegistration) (*models.UserRe
 	return insertedUser, nil
 }
 
-func (users *UsersManager) Update(userID int, newName string) (*models.UserRegistration, error) {
+func (users *UsersManager) UpdateName(userID int, newName string) (*models.UserRegistration, error) {
 	collectionUsers := users.db.Collection(usersCollection)
 
 	filter := &bson.M{
@@ -114,6 +114,32 @@ func (users *UsersManager) Update(userID int, newName string) (*models.UserRegis
 	updatedUser, err := users.findUserByFilter(filter)
 	if err != nil {
 		return nil, errors.Wrap(err, "can not find updated by name user")
+	}
+
+	return updatedUser, nil
+}
+
+func (users *UsersManager) UpdateEmail(userID int, newEmail string) (*models.UserRegistration, error) {
+	collectionUsers := users.db.Collection(usersCollection)
+
+	filter := &bson.M{
+		"user_id": userID,
+	}
+
+	upd := &bson.M{
+		"$set": &bson.M{
+			"email": newEmail,
+		},
+	}
+
+	_, err := collectionUsers.UpdateOne(context.Background(), filter, upd)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not update email by user")
+	}
+
+	updatedUser, err := users.findUserByFilter(filter)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not find updated by email user")
 	}
 
 	return updatedUser, nil

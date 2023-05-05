@@ -9,7 +9,8 @@ import (
 
 type DB interface {
 	Insert(user *models.UserRegistration) (*models.UserRegistration, error)
-	Update(userID int, newName string) (*models.UserRegistration, error)
+	UpdateName(userID int, newName string) (*models.UserRegistration, error)
+	UpdateEmail(userID int, newEmail string) (*models.UserRegistration, error)
 }
 
 type UsersManager struct {
@@ -33,11 +34,20 @@ func (user *UsersManager) Create(newUser *models.UserRegistration) (*models.User
 	return insertedUser, nil
 }
 
-func (user *UsersManager) Update(userID int, newName string) (*models.UserRegistration, error) {
-	updatedName, err := user.db.Update(userID, newName)
+func (user *UsersManager) UpdateByName(userID int, newName string) (*models.UserRegistration, error) {
+	updatedName, err := user.db.UpdateName(userID, newName)
 	if err != nil {
 		return nil, errors.Wrap(err, "can not update users name")
 	}
 
 	return updatedName, nil
+}
+
+func (user *UsersManager) UpdateByEmail(userID int, newEmail string) (*models.UserRegistration, error) {
+	updatedEmail, err := user.db.UpdateEmail(userID, newEmail)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not update users email")
+	}
+
+	return updatedEmail, nil
 }

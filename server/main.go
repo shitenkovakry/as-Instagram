@@ -17,7 +17,8 @@ import (
 	handler_add_photo "instagram/handlers/photo/add-photo"
 	handler_read "instagram/handlers/photo/read-photo"
 	handler_create "instagram/handlers/user/create"
-	handler_update_user "instagram/handlers/user/update"
+	handler_update_email "instagram/handlers/user/update"
+	handler_update_name "instagram/handlers/user/update"
 	"instagram/logger"
 
 	"github.com/go-chi/chi/v5"
@@ -43,8 +44,10 @@ func main() {
 
 	handlerForCreateUser := handler_create.NewHandlerForCreateUser(log, usersManager)
 	router.Method(http.MethodPost, "/api/v1/users/register", handlerForCreateUser)
-	handlerForUpdateUser := handler_update_user.NewHandlerForUpdateUserByName(log, usersManager)
-	router.Method(http.MethodPut, "/api/v1/users/update", handlerForUpdateUser)
+	handlerForUpdateNameOfUser := handler_update_name.NewHandlerForUpdateUserByName(log, usersManager)
+	router.Method(http.MethodPut, "/api/v1/users/update/name", handlerForUpdateNameOfUser)
+	handlerForUpdateEmailOfUser := handler_update_email.NewHandlerForUpdateUserByEmail(log, usersManager)
+	router.Method(http.MethodPut, "/api/v1/users/update/email", handlerForUpdateEmailOfUser)
 
 	handlerReadPhotos := handler_read.NewHandlerForReadPhoto(log, photosManager)
 	router.Method(http.MethodGet, "/api/v1/photos", handlerReadPhotos)

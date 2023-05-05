@@ -66,3 +66,10 @@ curl -i -X DELETE \
   --data-binary '{"user_id": 1}' \
   http://localhost:8080/api/v1/users/delete
 ```
+
+In order to delete photo, do this:
+```
+curl -i -X DELETE \
+  --data-binary '{"photo_id": 1}' \
+  http://localhost:8080/api/v1/photos/delete
+```

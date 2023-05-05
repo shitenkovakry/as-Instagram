@@ -10,6 +10,7 @@ import (
 type DB interface {
 	InsertForComment(commentOfUser *models.Comment) (*models.Comment, error)
 	DeleteComment(commentID int) (*models.Comment, error)
+	UpdateComment(commentID int, newComment string) (*models.Comment, error)
 }
 
 type CommentsManager struct {
@@ -40,4 +41,13 @@ func (comment *CommentsManager) Delete(commentID int) (*models.Comment, error) {
 	}
 
 	return deletedComment, nil
+}
+
+func (comment *CommentsManager) Update(commentID int, newComment string) (*models.Comment, error) {
+	updatedComment, err := comment.db.UpdateComment(commentID, newComment)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not update users comment")
+	}
+
+	return updatedComment, nil
 }

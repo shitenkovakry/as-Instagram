@@ -111,3 +111,29 @@ func (comments *СommentsManager) DeleteComment(commentID int) (*models3.Comment
 
 	return deletedComment, nil
 }
+
+func (comments *СommentsManager) UpdateComment(commentID int, newComment string) (*models3.Comment, error) {
+	collectionComments := comments.db.Collection(commentsCollection)
+
+	filter := &bson.M{
+		"comment_id": commentID,
+	}
+
+	upd := &bson.M{
+		"$set": &bson.M{
+			"comment": newComment,
+		},
+	}
+
+	_, err := collectionComments.UpdateOne(context.Background(), filter, upd)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not update comment by user")
+	}
+
+	updatedComment, err := comments.findCommentByFilter(filter)
+	if err != nil {
+		return nil, errors.Wrap(err, "can not find updated by comment user")
+	}
+
+	return updatedComment, nil
+}

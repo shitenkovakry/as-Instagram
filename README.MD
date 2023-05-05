@@ -73,3 +73,10 @@ curl -i -X DELETE \
   --data-binary '{"photo_id": 1}' \
   http://localhost:8080/api/v1/photos/delete
 ```
+
+In order to update comment, do this:
+```
+curl -i -X PUT \
+  --data-binary '{"comment_id": 1, "new comment":"kry is cute girl"}' \
+  http://localhost:8080/api/v1/comments/update
+```

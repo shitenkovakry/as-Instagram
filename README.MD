@@ -1,5 +1,11 @@
 # Practices
 
+### Web
+```sh
+nave use stable
+npx http-server -p 8081 -c-1 ./web
+```
+
 ### How to use?
 
 ```sh
@@ -22,7 +28,8 @@ curl -i -X POST \
 In order to read photos, do this:
 
 ```
-curl -i -X GET \
+curl -i -X POST \
+  --data-binary {"user_id": 1} \
   http://localhost:8080/api/v1/photos
 ```
 
@@ -80,3 +87,12 @@ curl -i -X PUT \
   --data-binary '{"comment_id": 1, "new comment":"kry is cute girl"}' \
   http://localhost:8080/api/v1/comments/update
 ```
+
+
+
+
+curl 'http://localhost:8080/example-upload-file' \
+-X 'POST' \
+-H 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryBBfCeIeb5cVcTyaG' \
+-H 'Content-Length: 37866' \
+--data-binary $'------WebKitFormBoundaryBBfCeIeb5cVcTyaG\r\nContent-Disposition: form-data; name="file-upload"; filename=" \u0438\u0441\u043f21.jpg"\r\nContent-Type: image/jpeg\r\n\r\n\r\n------WebKitFormBoundaryBBfCeIeb5cVcTyaG--\r\n'

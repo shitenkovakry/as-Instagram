@@ -8,7 +8,7 @@ import (
 )
 
 type DB interface {
-	Read() (models.Photos, error)
+	ReadPhoto(userID int) (models.Photos, error)
 	InsertForPhoto(photoOfUser *models.Photo) (*models.Photo, error)
 	DeletePhoto(photoID int) (*models.Photo, error)
 }
@@ -25,8 +25,8 @@ func New(log logger.Logger, db DB) *PhotosManager {
 	}
 }
 
-func (photos *PhotosManager) Read() (models.Photos, error) {
-	read, err := photos.db.Read()
+func (photos *PhotosManager) Read(userID int) (models.Photos, error) {
+	read, err := photos.db.ReadPhoto(userID)
 	if err != nil {
 		return nil, errors.Wrapf(err, "can not read")
 	}

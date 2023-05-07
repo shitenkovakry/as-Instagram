@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Upload Form OK</title>
+  </head>
+  <body>
+    <h1>File Upload Form OK OK</h1>
+    <form id="my-form" method="POST" enctype="multipart/form-data" action="http://localhost:8080/submit-form">
+      <label for="file-upload">Choose a file to upload:</label>
+      <input type="file" id="file-upload" name="file-upload" accept="image/*">
+      <br><br>
+      <input type="submit" value="Upload">
+    </form>
+  </body>
+
+  <script>
+    const myForm = document.getElementById('my-form');
+    myForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const url = event.target.action;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+      // code to handle the form submission goes here
+    });
+  </script>
+</html>

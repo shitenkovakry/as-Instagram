@@ -11,9 +11,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (mongo *PhotosManager) Read() (models.Photos, error) {
+func (mongo *PhotosManager) ReadPhoto(userID int) (models.Photos, error) {
 	collectionPhotos := mongo.db.Collection(photosCollection)
-	filter := &bson.M{}
+	filter := &bson.M{
+		"user_id": userID,
+	}
 
 	cursor, err := collectionPhotos.Find(context.Background(), filter)
 	if err != nil {

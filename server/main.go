@@ -17,7 +17,8 @@ import (
 	handler_update_comment "instagram/handlers/comment/update-comment"
 	handler_add_photo "instagram/handlers/photo/add-photo"
 	handler_delete_photo "instagram/handlers/photo/delete-photo"
-	handler_read "instagram/handlers/photo/read-photo"
+	handler_read_photo "instagram/handlers/photo/read-photo"
+	handler_read_photos "instagram/handlers/photo/read-photos"
 	handler_create "instagram/handlers/user/create"
 	handler_delete_user "instagram/handlers/user/delete"
 	handler_update_email "instagram/handlers/user/update"
@@ -54,8 +55,10 @@ func main() {
 	handlerDeleteUser := handler_delete_user.NewHandlerForDeleteUser(log, usersManager)
 	router.Method(http.MethodDelete, "/api/v1/users/delete", handlerDeleteUser)
 
-	handlerReadPhotos := handler_read.NewHandlerForReadPhoto(log, photosManager)
+	handlerReadPhotos := handler_read_photos.NewHandlerForReadPhotos(log, photosManager)
 	router.Method(http.MethodGet, "/api/v1/photos", handlerReadPhotos)
+	handlerReadPhoto := handler_read_photo.NewHandlerForReadPhoto(log, photosManager)
+	router.Method(http.MethodGet, "/api/v1/photo/{id_user}/{id_photo}", handlerReadPhoto)
 	handlerAddPhoto := handler_add_photo.NewHandlerForAddPhoto(log, photosManager)
 	router.Method(http.MethodPost, "/api/v1/photos/add", handlerAddPhoto)
 	handlerDeletePhoto := handler_delete_photo.NewHandlerForDeletePhoto(log, photosManager)

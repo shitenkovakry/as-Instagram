@@ -3,13 +3,15 @@ package photos
 import (
 	"instagram/logger"
 	models "instagram/models/photos"
+	"os"
 
 	"github.com/pkg/errors"
 )
 
 type DB interface {
-	ReadPhoto(userID int) (models.Photos, error)
-	InsertForPhoto(photoOfUser *models.Photo) (*models.Photo, error)
+	ReadPhotos(userID int) (models.Photos, error)
+	ReadPhoto(idUser int, idPhoto int) (*models.Photo, error)
+	InsertForPhoto(userID int, path string) (*models.Photo, error)
 	DeletePhoto(photoID int) (*models.Photo, error)
 }
 
@@ -25,8 +27,8 @@ func New(log logger.Logger, db DB) *PhotosManager {
 	}
 }
 
-func (photos *PhotosManager) Read(userID int) (models.Photos, error) {
-	read, err := photos.db.ReadPhoto(userID)
+func (photos *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
+	read, err := photos.db.ReadPhotos(userID)
 	if err != nil {
 		return nil, errors.Wrapf(err, "can not read")
 	}
@@ -34,8 +36,21 @@ func (photos *PhotosManager) Read(userID int) (models.Photos, error) {
 	return read, nil
 }
 
-func (photo *PhotosManager) Add(photoOfUser *models.Photo) (*models.Photo, error) {
-	insertedPhoto, err := photo.db.InsertForPhoto(photoOfUser)
+func (photos *PhotosManager) ReadPhoto(idUser int, idPhoto int) (*models.Photo, error) {
+	read, err := photos.db.ReadPhoto(idUser, idPhoto)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can not read")
+	}
+
+	return read, nil
+}
+
+func (photo *PhotosManager) Add(userID int, photoContent []byte, photoFilename string) (*models.Photo, error) {
+	if err := os.WriteFile(photoFilename, photoContent, os.ModePerm); err != nil {
+		return nil, errors.Wrap(err, "cannot save photo content")
+	}
+
+	insertedPhoto, err := photo.db.InsertForPhoto(userID, photoFilename)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot add photo")
 	}

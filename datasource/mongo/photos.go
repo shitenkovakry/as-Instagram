@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (mongo *PhotosManager) ReadPhoto(userID int) (models.Photos, error) {
+func (mongo *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
 	collectionPhotos := mongo.db.Collection(photosCollection)
 	filter := &bson.M{
 		"user_id": userID,
@@ -29,6 +29,27 @@ func (mongo *PhotosManager) ReadPhoto(userID int) (models.Photos, error) {
 	}
 
 	return photos, nil
+}
+
+func (mongo *PhotosManager) ReadPhoto(idUser int, idPhoto int) (*models.Photo, error) {
+	collectionPhotos := mongo.db.Collection(photosCollection)
+	filter := &bson.M{
+		"id_user":  idUser,
+		"id_photo": idPhoto,
+	}
+
+	cursor, err := collectionPhotos.Find(context.Background(), filter)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can not read photos")
+	}
+
+	var photo *models.Photo
+
+	if err := cursor.All(context.Background(), &photo); err != nil {
+		return nil, errors.Wrap(err, "can not read cursor")
+	}
+
+	return photo, nil
 }
 
 func (photos *PhotosManager) obtainNextIDForPhoto() (int, error) {
@@ -84,7 +105,7 @@ func (photos *PhotosManager) findPhotoByFilter(filter *bson.M) (*models.Photo, e
 	return foundPhoto, nil
 }
 
-func (photos *PhotosManager) InsertForPhoto(photoOfUser *models.Photo) (*models.Photo, error) {
+func (photos *PhotosManager) InsertForPhoto(userID int, path string) (*models.Photo, error) {
 	collectionPhotos := photos.db.Collection(photosCollection)
 
 	nextID, err := photos.obtainNextIDForPhoto()
@@ -92,7 +113,11 @@ func (photos *PhotosManager) InsertForPhoto(photoOfUser *models.Photo) (*models.
 		return nil, errors.Wrap(err, "can not find next id for photo")
 	}
 
-	photoOfUser.IDPhoto = nextID
+	photoOfUser := &models.Photo{
+		IDPhoto: nextID,
+		IDUser:  userID,
+		Path:    path,
+	}
 
 	opts := options.InsertOne()
 

@@ -33,6 +33,14 @@ curl -i -X POST \
   http://localhost:8080/api/v1/photos
 ```
 
+In order to read photo, do this:
+
+```
+curl -i -X POST \
+  --data-binary {"id_user": 1, "id_photo":1} \
+  http://localhost:8080/api/v1/photo/1/1
+```
+
 In order to add comment, do this:
 ```
 curl -i -X POST \

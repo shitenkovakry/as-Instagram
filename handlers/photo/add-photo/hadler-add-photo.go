@@ -2,12 +2,15 @@ package addphoto
 
 import (
 	"encoding/json"
+	"instagram/errordefs"
 	"instagram/logger"
 	models "instagram/models/photos"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 const maxMem = (2 << 21) * 2
@@ -29,28 +32,28 @@ type PhotoRequest struct {
 
 func (handler *HandlerForAddPhoto) prepareRequest(request *http.Request) (*PhotoRequest, error) {
 	if err := request.ParseMultipartForm(maxMem); err != nil {
-		panic(err)
+		return nil, errors.Wrapf(err, "can not parse to multipart")
 	} // - читает информацию requesta, а request содержит body и эта функция просматривает  информацию body: сколько весит бинарный и тд
 
 	userIDs, ok := request.MultipartForm.Value["user-id"]
 	if !ok || len(userIDs) == 0 {
-		panic("send the user-id")
+		return nil, errors.Wrapf(errordefs.ErrNotFound, "can not read the user-id")
 	} // из этой функции считываем юсер айди
 
 	userID, err := strconv.Atoi(userIDs[0])
 	if err != nil {
-		panic(err)
+		return nil, errors.Wrapf(err, "can not convert")
 	} // айди из стринга переводится в инт
 
 	filesUpload, ok := request.MultipartForm.File["file-upload"]
 	if !ok || len(filesUpload) == 0 {
-		panic("send at least one file")
+		return nil, errors.Wrapf(err, "can not send at least one file")
 	} // считываем файл аплоад(нашу фотку)
 
 	fileUpload := filesUpload[0]
 	file, err := fileUpload.Open()
 	if err != nil {
-		panic(err)
+		return nil, errors.Wrapf(errordefs.ErrNotFound, "can not read the file")
 	}
 
 	newPhoto := &PhotoRequest{

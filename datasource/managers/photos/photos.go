@@ -1,6 +1,7 @@
 package photos
 
 import (
+	"fmt"
 	"instagram/logger"
 	models "instagram/models/photos"
 	"os"
@@ -36,17 +37,30 @@ func (photos *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
 	return read, nil
 }
 
-func (photos *PhotosManager) ReadPhoto(idUser int, idPhoto int) (*models.Photo, error) {
+const (
+	basePath = "/Users/kryshitenkova/Public/photos"
+)
+
+func (photos *PhotosManager) ReadPhoto(idUser int, idPhoto int) ([]byte, error) {
 	read, err := photos.db.ReadPhoto(idUser, idPhoto)
 	if err != nil {
-		return nil, errors.Wrapf(err, "can not read")
+		return nil, errors.Wrapf(err, "can not read from DB")
 	}
 
-	return read, nil
+	path := fmt.Sprintf("%s/%s", basePath, read.Path)
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can not read the photo from the file system")
+	}
+
+	return data, nil
 }
 
 func (photo *PhotosManager) Add(userID int, photoContent []byte, photoFilename string) (*models.Photo, error) {
-	if err := os.WriteFile(photoFilename, photoContent, os.ModePerm); err != nil {
+	path := fmt.Sprintf("%s/%s", basePath, photoFilename)
+
+	if err := os.WriteFile(path, photoContent, os.ModePerm); err != nil {
 		return nil, errors.Wrap(err, "cannot save photo content")
 	}
 

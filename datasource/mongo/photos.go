@@ -38,14 +38,11 @@ func (mongo *PhotosManager) ReadPhoto(idUser int, idPhoto int) (*models.Photo, e
 		"id_photo": idPhoto,
 	}
 
-	cursor, err := collectionPhotos.Find(context.Background(), filter)
-	if err != nil {
-		return nil, errors.Wrapf(err, "can not read photos")
-	}
+	result := collectionPhotos.FindOne(context.Background(), filter)
 
 	var photo *models.Photo
 
-	if err := cursor.All(context.Background(), &photo); err != nil {
+	if err := result.Decode(&photo); err != nil {
 		return nil, errors.Wrap(err, "can not read cursor")
 	}
 

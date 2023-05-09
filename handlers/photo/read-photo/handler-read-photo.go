@@ -1,10 +1,8 @@
 package readphoto
 
 import (
-	"encoding/json"
 	"instagram/logger"
 	models "instagram/models/photos"
-	"io"
 	"net/http"
 	"strconv"
 
@@ -17,7 +15,7 @@ type ReadPhoto struct {
 }
 
 type PhotoActionsForHandlerReadPhoto interface {
-	ReadPhoto(idUser int, idPhoto int) (*models.Photo, error)
+	ReadPhoto(idUser int, idPhoto int) ([]byte, error)
 }
 
 type HandlerForReadPhoto struct {
@@ -50,21 +48,6 @@ func (handler *HandlerForReadPhoto) prepareRequest(request *http.Request) (*mode
 		return nil, err
 	}
 
-	body, err := io.ReadAll(request.Body)
-	if err != nil {
-		handler.log.Printf("cannot read body: %v", err)
-
-		return nil, err
-	}
-
-	var readPhotoFromClient *ReadPhoto
-
-	if err := json.Unmarshal(body, &readPhotoFromClient); err != nil {
-		handler.log.Printf("cannot unmarshal body=%s: %v", string(body), err)
-
-		return nil, err
-	}
-
 	readPhoto := &models.Photo{
 		IDUser:  userID,
 		IDPhoto: photoID,
@@ -73,17 +56,9 @@ func (handler *HandlerForReadPhoto) prepareRequest(request *http.Request) (*mode
 	return readPhoto, nil
 }
 
-func (handler *HandlerForReadPhoto) sendResponse(writer http.ResponseWriter, readPhoto *models.Photo) {
-	data, err := json.Marshal(readPhoto)
-	if err != nil {
-		handler.log.Printf("can not marshal photo: %v", err)
-		writer.WriteHeader(http.StatusInternalServerError)
-
-		return
-	}
-
+func (handler *HandlerForReadPhoto) sendResponse(writer http.ResponseWriter, data []byte) {
 	if _, err := writer.Write(data); err != nil {
-		handler.log.Printf("can not writer photo: %v", err)
+		handler.log.Printf("can not writer photoc: %v", err)
 		writer.WriteHeader(http.StatusInternalServerError)
 
 		return
@@ -107,6 +82,7 @@ func (handler *HandlerForReadPhoto) ServeHTTP(writer http.ResponseWriter, reques
 		return
 	}
 
+	writer.Header().Set("Content-Type", http.DetectContentType(photo))
 	handler.sendResponse(writer, photo)
 }
 

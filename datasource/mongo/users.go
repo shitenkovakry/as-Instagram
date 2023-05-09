@@ -161,5 +161,17 @@ func (users *UsersManager) DeleteUser(userID int) (*models.UserRegistration, err
 		return nil, errors.Wrap(err, "can not delete user")
 	}
 
+	collectionComments := users.db.Collection(commentsCollection)
+
+	if _, err := collectionComments.DeleteMany(context.Background(), filter); err != nil {
+		return nil, errors.Wrap(err, "can not delete user's comments")
+	}
+
+	collectionPhotos := users.db.Collection(photosCollection)
+
+	if _, err := collectionPhotos.DeleteMany(context.Background(), filter); err != nil {
+		return nil, errors.Wrap(err, "can not delete user's photos")
+	}
+
 	return deletedUser, nil
 }

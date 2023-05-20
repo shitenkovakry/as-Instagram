@@ -58,3 +58,40 @@ func (likes *LikesManager) InsertForLike(idPhoto int, idUser int) error {
 
 	return nil
 }
+
+func (likes *LikesManager) CountLikes(idPhoto int) (int, error) {
+	collectionLikes := likes.db.Collection(likesCollection)
+
+	// Define the MongoDB pipeline stages
+	pipeline := mongo.Pipeline{
+		{
+			{
+				"$group", bson.D{
+					{"_id", "$photo_id"},
+					{"count",
+						bson.D{
+							{
+								"$count", bson.D{},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	cursor, err := collectionLikes.Aggregate(context.Background(), pipeline)
+	if err != nil {
+		return 0, err
+	}
+
+	defer cursor.Close(context.Background())
+
+	var myresult interface{}
+
+	if err := cursor.All(context.Background(), &myresult); err != nil {
+		return 0, err
+	}
+
+	return 0, nil
+}

@@ -8,6 +8,7 @@ import (
 
 type DB interface {
 	InsertForLike(idPhoto int, idUser int) error
+	CountLikes(idPhoto int) (int, error)
 }
 
 type LikesManager struct {
@@ -30,3 +31,23 @@ func (like *LikesManager) Add(idPhoto int, idUser int) error {
 
 	return nil
 }
+
+func (like *LikesManager) Count(idPhoto int) (int, error) {
+	counted, err := like.db.CountLikes(idPhoto)
+	if err != nil {
+		return 0, errors.Wrap(err, "can not count likes")
+	}
+
+	return counted, nil
+}
+
+/*
+[
+  {
+    $group: {
+      _id: "$photo_id",
+      count: { $count: { } }
+    }
+  }
+]
+*/

@@ -17,6 +17,7 @@ import (
 	handler_delete_comment "instagram/handlers/comment/delete-comment"
 	handler_update_comment "instagram/handlers/comment/update-comment"
 	handler_add_like "instagram/handlers/like/add-like"
+	handler_count_likes "instagram/handlers/like/count-of-likes"
 	handler_add_photo "instagram/handlers/photo/add-photo"
 	handler_delete_photo "instagram/handlers/photo/delete-photo"
 	handler_read_photo "instagram/handlers/photo/read-photo"
@@ -77,6 +78,8 @@ func main() {
 
 	handlerAddLike := handler_add_like.NewHandlerForAddLike(log, likesManager)
 	router.Method(http.MethodPost, "/api/v1/likes/add", handlerAddLike)
+	handlerCountLikes := handler_count_likes.NewHandlerForCountLikes(log, likesManager)
+	router.Method(http.MethodGet, "/api/v1/likes/count", handlerCountLikes)
 
 	server := NewServer(addr, router)
 

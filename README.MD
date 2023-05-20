@@ -103,6 +103,13 @@ curl -i -X POST \
   http://localhost:8080/api/v1/likes/add
 ```
 
+In order to count likes, do this:
+```
+curl -i -X GET \
+  --data-binary '{"photo_id":1}' \
+  http://localhost:8080/api/v1/likes/count
+```
+
 
 
 curl 'http://localhost:8080/example-upload-file' \

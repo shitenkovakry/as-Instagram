@@ -96,6 +96,12 @@ curl -i -X PUT \
   http://localhost:8080/api/v1/comments/update
 ```
 
+In order to add like, do this:
+```
+curl -i -X POST \
+  --data-binary '{"user_id": 1, "photo_id":1}' \
+  http://localhost:8080/api/v1/likes/add
+```
 
 
 

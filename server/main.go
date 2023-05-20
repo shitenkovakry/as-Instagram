@@ -9,12 +9,14 @@ import (
 	"time"
 
 	"instagram/datasource/managers/comments"
+	"instagram/datasource/managers/likes"
 	photos "instagram/datasource/managers/photos"
 	users "instagram/datasource/managers/users"
 	"instagram/datasource/mongo"
 	handler_add "instagram/handlers/comment/add-comment"
 	handler_delete_comment "instagram/handlers/comment/delete-comment"
 	handler_update_comment "instagram/handlers/comment/update-comment"
+	handler_add_like "instagram/handlers/like/add-like"
 	handler_add_photo "instagram/handlers/photo/add-photo"
 	handler_delete_photo "instagram/handlers/photo/delete-photo"
 	handler_read_photo "instagram/handlers/photo/read-photo"
@@ -41,10 +43,12 @@ func main() {
 	usersDB := mongo.NewUsersManager(log, "", "", []string{"localhost:27017"}, "my-database")
 	photosDB := mongo.NewPhotosManager(log, "", "", []string{"localhost:27017"}, "my-database")
 	commentsDB := mongo.NewCommentsManager(log, "", "", []string{"localhost:27017"}, "my-database")
+	likesDB := mongo.NewLikeManager(log, "", "", []string{"localhost:27017"}, "my-database")
 
 	usersManager := users.New(log, usersDB)
 	photosManager := photos.New(log, photosDB)
 	commentsManager := comments.New(log, commentsDB)
+	likesManager := likes.New(log, likesDB)
 
 	handlerForCreateUser := handler_create.NewHandlerForCreateUser(log, usersManager)
 	router.Method(http.MethodPost, "/api/v1/users/register", handlerForCreateUser)
@@ -70,6 +74,9 @@ func main() {
 	router.Method(http.MethodDelete, "/api/v1/comments/delete", handlerDeleteComment)
 	handlerForUpdateComment := handler_update_comment.NewHandlerForUpdateComment(log, commentsManager)
 	router.Method(http.MethodPut, "/api/v1/comments/update", handlerForUpdateComment)
+
+	handlerAddLike := handler_add_like.NewHandlerForAddLike(log, likesManager)
+	router.Method(http.MethodPost, "/api/v1/likes/add", handlerAddLike)
 
 	server := NewServer(addr, router)
 

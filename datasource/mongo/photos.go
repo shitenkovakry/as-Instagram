@@ -157,5 +157,11 @@ func (photos *PhotosManager) DeletePhoto(photoID int) (*models.Photo, error) {
 		return nil, errors.Wrap(err, "can not delete photo's comments")
 	}
 
+	collectionLikes := photos.db.Collection(likesCollection)
+
+	if _, err := collectionLikes.DeleteMany(context.Background(), filter); err != nil {
+		return nil, errors.Wrap(err, "can not delete photo's likes")
+	}
+
 	return deletedPhoto, nil
 }

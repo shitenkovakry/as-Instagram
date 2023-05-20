@@ -49,7 +49,7 @@ func (likes *LikesManager) InsertForLike(idPhoto int, idUser int) error {
 
 	likeToAdd := &models.Like{
 		IDUser:  idUser,
-		IdPhoto: idPhoto,
+		IDPhoto: idPhoto,
 	}
 
 	if _, err := collectionLikes.InsertOne(context.Background(), likeToAdd, opts); err != nil {

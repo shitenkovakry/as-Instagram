@@ -10,8 +10,8 @@ import (
 )
 
 type DeleteLike struct {
-	IDUser  int `bson:"user_id"`
-	IDPhoto int `bson:"photo_id"`
+	IDUser  int `json:"user_id"`
+	IDPhoto int `json:"photo_id"`
 }
 
 type LikeActionsForHandlerDeleteLike interface {

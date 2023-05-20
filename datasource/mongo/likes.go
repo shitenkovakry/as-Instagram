@@ -111,3 +111,23 @@ func (likes *LikesManager) CountLikes(idPhoto int) (int, error) {
 
 	return 0, errordefs.ErrIncorrect
 }
+
+func (likes *LikesManager) DeleteLike(photoID int, userID int) error {
+	collectionLikes := likes.db.Collection(likesCollection)
+
+	filter := &bson.M{
+		"photo_id": photoID,
+		"user_id":  userID,
+	}
+
+	_, err := likes.findLikeByFilter(filter)
+	if err != nil {
+		return errors.Wrap(err, "can not find deleted like")
+	}
+
+	if _, err := collectionLikes.DeleteOne(context.Background(), filter); err != nil {
+		return errors.Wrap(err, "can not delete like")
+	}
+
+	return nil
+}

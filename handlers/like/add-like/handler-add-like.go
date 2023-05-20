@@ -47,7 +47,7 @@ func (handler *HandlerForAddLike) prepareRequest(request *http.Request) (*models
 
 	newLike := &models.Like{
 		IDUser:  newLikeFromClient.IDUser,
-		IdPhoto: newLikeFromClient.IDPhoto,
+		IDPhoto: newLikeFromClient.IDPhoto,
 	}
 
 	return newLike, nil
@@ -62,7 +62,7 @@ func (handler *HandlerForAddLike) ServeHTTP(write http.ResponseWriter, request *
 		return
 	}
 
-	if err := handler.likeActions.Add(newLike.IdPhoto, newLike.IDUser); err != nil {
+	if err := handler.likeActions.Add(newLike.IDPhoto, newLike.IDUser); err != nil {
 		handler.log.Printf("cannot create like: %v", err)
 		write.WriteHeader(http.StatusInternalServerError)
 

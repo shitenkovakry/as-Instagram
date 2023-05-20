@@ -9,6 +9,7 @@ import (
 type DB interface {
 	InsertForLike(idPhoto int, idUser int) error
 	CountLikes(idPhoto int) (int, error)
+	DeleteLike(photoID int, userID int) error
 }
 
 type LikesManager struct {
@@ -41,13 +42,11 @@ func (like *LikesManager) Count(idPhoto int) (int, error) {
 	return counted, nil
 }
 
-/*
-[
-  {
-    $group: {
-      _id: "$photo_id",
-      count: { $count: { } }
-    }
-  }
-]
-*/
+func (like *LikesManager) Delete(photoID int, userID int) error {
+	err := like.db.DeleteLike(photoID, userID)
+	if err != nil {
+		return errors.Wrap(err, "can not delete like")
+	}
+
+	return nil
+}

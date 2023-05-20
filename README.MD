@@ -107,6 +107,13 @@ curl -i -X GET \
   http://localhost:8080/api/v1/likes/1
 ```
 
+In order to delete like, do this:
+```
+curl -i -X DELETE \
+  --data-binary '{"user_id": 1, "photo_id": 1}' \
+  http://localhost:8080/api/v1/likes/delete
+```
+
 
 
 curl 'http://localhost:8080/example-upload-file' \

@@ -3,10 +3,10 @@ package countoflikes
 import (
 	"encoding/json"
 	"instagram/logger"
-	"io"
 	"net/http"
+	"strconv"
 
-	models "instagram/models/likes"
+	"github.com/go-chi/chi/v5"
 )
 
 type CountLikes struct {
@@ -22,33 +22,17 @@ type HandlerForCountLikes struct {
 	likeActions LikeActionsForHandlerCountLikes
 }
 
-func (handler *HandlerForCountLikes) prepareRequest(request *http.Request) (*models.Like, error) {
-	defer func() {
-		if err := request.Body.Close(); err != nil {
-			handler.log.Printf("cannot close body: %v", err)
-		}
-	}()
+func (handler *HandlerForCountLikes) prepareRequest(request *http.Request) (int, error) {
+	photoIDParam := chi.URLParam(request, "id_photo")
+	photoID, err := strconv.Atoi(photoIDParam)
 
-	body, err := io.ReadAll(request.Body)
 	if err != nil {
-		handler.log.Printf("cannot read body: %v", err)
+		handler.log.Printf("err = %v", err)
 
-		return nil, err
+		return 0, err
 	}
 
-	var newCountOfLikes *CountLikes
-
-	if err := json.Unmarshal(body, &newCountOfLikes); err != nil {
-		handler.log.Printf("cannot unmarshal body=%s: %v", string(body), err)
-
-		return nil, err
-	}
-
-	newCount := &models.Like{
-		IdPhoto: newCountOfLikes.IDPhoto,
-	}
-
-	return newCount, nil
+	return photoID, nil
 }
 
 func (handler *HandlerForCountLikes) sendResponse(write http.ResponseWriter, countedLikes int) {
@@ -69,7 +53,7 @@ func (handler *HandlerForCountLikes) sendResponse(write http.ResponseWriter, cou
 }
 
 func (handler *HandlerForCountLikes) ServeHTTP(write http.ResponseWriter, request *http.Request) {
-	newCount, err := handler.prepareRequest(request)
+	photoID, err := handler.prepareRequest(request)
 	if err != nil {
 		handler.log.Printf("cannot prepare request: %v", err)
 		write.WriteHeader(http.StatusBadRequest)
@@ -77,7 +61,7 @@ func (handler *HandlerForCountLikes) ServeHTTP(write http.ResponseWriter, reques
 		return
 	}
 
-	countedLikes, err := handler.likeActions.Count(newCount.IdPhoto)
+	countedLikes, err := handler.likeActions.Count(photoID)
 	if err != nil {
 		handler.log.Printf("cannot count likes: %v", err)
 		write.WriteHeader(http.StatusInternalServerError)

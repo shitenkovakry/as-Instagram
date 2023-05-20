@@ -28,16 +28,14 @@ curl -i -X POST \
 In order to read photos, do this:
 
 ```
-curl -i -X POST \
-  --data-binary {"user_id": 1} \
+curl -i -X GET \
   http://localhost:8080/api/v1/photos
 ```
 
 In order to read photo, do this:
 
 ```
-curl -i -X POST \
-  --data-binary {"id_user": 1, "id_photo":1} \
+curl -i -X GET \
   http://localhost:8080/api/v1/photo/1/1
 ```
 
@@ -106,8 +104,7 @@ curl -i -X POST \
 In order to count likes, do this:
 ```
 curl -i -X GET \
-  --data-binary '{"photo_id":1}' \
-  http://localhost:8080/api/v1/likes/count
+  http://localhost:8080/api/v1/likes/1
 ```
 
 

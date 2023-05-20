@@ -79,7 +79,7 @@ func main() {
 	handlerAddLike := handler_add_like.NewHandlerForAddLike(log, likesManager)
 	router.Method(http.MethodPost, "/api/v1/likes/add", handlerAddLike)
 	handlerCountLikes := handler_count_likes.NewHandlerForCountLikes(log, likesManager)
-	router.Method(http.MethodGet, "/api/v1/likes/count", handlerCountLikes)
+	router.Method(http.MethodGet, "/api/v1/likes/{id_photo:[0-9]+}", handlerCountLikes)
 
 	server := NewServer(addr, router)
 

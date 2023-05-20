@@ -59,6 +59,10 @@ func (likes *LikesManager) InsertForLike(idPhoto int, idUser int) error {
 	return nil
 }
 
+type counterLikes []struct {
+	Count int32 `bson:"count"`
+}
+
 func (likes *LikesManager) CountLikes(idPhoto int) (int, error) {
 	collectionLikes := likes.db.Collection(likesCollection)
 
@@ -78,6 +82,14 @@ func (likes *LikesManager) CountLikes(idPhoto int) (int, error) {
 				},
 			},
 		},
+		{
+			{
+				"$project", bson.D{
+					{"_id", 0},
+					{"count", "$count"},
+				},
+			},
+		},
 	}
 
 	cursor, err := collectionLikes.Aggregate(context.Background(), pipeline)
@@ -87,11 +99,15 @@ func (likes *LikesManager) CountLikes(idPhoto int) (int, error) {
 
 	defer cursor.Close(context.Background())
 
-	var myresult interface{}
+	var myresult counterLikes
 
 	if err := cursor.All(context.Background(), &myresult); err != nil {
 		return 0, err
 	}
 
-	return 0, nil
+	if len(myresult) == 1 {
+		return int(myresult[0].Count), nil
+	}
+
+	return 0, errordefs.ErrIncorrect
 }

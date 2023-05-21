@@ -38,7 +38,7 @@ func (photos *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
 }
 
 const (
-	basePath = "/Users/kryshitenkova/Public/photos"
+	basePath = "./photos"
 )
 
 func (photos *PhotosManager) ReadPhoto(idUser int, idPhoto int) ([]byte, error) {

@@ -1,19 +1,6 @@
 # Practices
 
-### Web
-```sh
-nave use stable
-npx http-server -p 8081 -c-1 ./web
-```
-
-### How to use?
-
-```sh
-GOOS=linux GOARCH=amd64 go build -o ./build/app/myapp ./server/main.go
-docker-compose up -d
-```
-
-then wait for the docker infra to launch.
+test address: `http://insta-test.mas3.co`
 
 ### Tests
 

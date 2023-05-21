@@ -36,7 +36,8 @@ curl -i -X DELETE \
 
 In order to read photos, do this:
 ```
-curl -i -X GET \
+curl -i -X POST \
+  --data-binary '{"user_id": 1}' \
   http://localhost:8080/api/v1/photos
 ```
 

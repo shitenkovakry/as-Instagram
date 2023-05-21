@@ -62,7 +62,7 @@ func main() {
 	router.Method(http.MethodDelete, "/api/v1/users/delete", handlerDeleteUser)
 
 	handlerReadPhotos := handler_read_photos.NewHandlerForReadPhotos(log, photosManager)
-	router.Method(http.MethodGet, "/api/v1/photos", handlerReadPhotos)
+	router.Method(http.MethodPost, "/api/v1/photos", handlerReadPhotos)
 	handlerReadPhoto := handler_read_photo.NewHandlerForReadPhoto(log, photosManager)
 	router.Method(http.MethodGet, "/api/v1/photo/{id_user}/{id_photo}", handlerReadPhoto)
 	handlerAddPhoto := handler_add_photo.NewHandlerForAddPhoto(log, photosManager)

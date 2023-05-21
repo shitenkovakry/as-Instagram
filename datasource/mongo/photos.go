@@ -14,7 +14,7 @@ import (
 func (mongo *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
 	collectionPhotos := mongo.db.Collection(photosCollection)
 	filter := &bson.M{
-		"user_id": userID,
+		"id_user": userID,
 	}
 
 	cursor, err := collectionPhotos.Find(context.Background(), filter)
@@ -139,7 +139,7 @@ func (photos *PhotosManager) DeletePhoto(photoID int) (*models.Photo, error) {
 	collectionPhotos := photos.db.Collection(photosCollection)
 
 	filter := &bson.M{
-		"photo_id": photoID,
+		"id_photo": photoID,
 	}
 
 	deletedPhoto, err := photos.findPhotoByFilter(filter)

@@ -13,7 +13,7 @@ type ReadPhotos struct {
 }
 
 type PhotosActionsForHandlerReadPhotos interface {
-	ReadPhotos(user_id int) (models.Photos, error)
+	ReadPhotos(userID int) (models.Photos, error)
 }
 
 type HandlerForReadPhotos struct {

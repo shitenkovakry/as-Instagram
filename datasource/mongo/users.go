@@ -185,7 +185,7 @@ func (users *UsersManager) DeleteUser(userID int) (*models.UserRegistration, err
 func (users *UsersManager) ReadUser(idUser int) (*models.UserRegistration, error) {
 	collectionUsers := users.db.Collection(usersCollection)
 	filter := &bson.M{
-		"id_user": idUser,
+		"user_id": idUser,
 	}
 
 	result := collectionUsers.FindOne(context.Background(), filter)

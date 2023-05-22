@@ -6,7 +6,6 @@ import (
 
 	"github.com/pkg/errors"
 )
-x
 
 type DB interface {
 	Insert(user *models.UserRegistration) (*models.UserRegistration, error)

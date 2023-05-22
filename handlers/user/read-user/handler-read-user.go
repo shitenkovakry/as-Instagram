@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 type ReadUser struct {
-	ID int `json:"user_id"`
+	ID int `json:"id_user"`
 }
 
 type UserActionsForHandlerReadUser interface {

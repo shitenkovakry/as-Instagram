@@ -53,6 +53,8 @@ func main() {
 	commentsManager := comments.New(log, commentsDB)
 	likesManager := likes.New(log, likesDB)
 
+	handlerReadUser := handler_read_user.NewHandlerForReadUser(log, usersManager)
+	router.Method(http.MethodGet, "/api/v1/user/{id_user}", handlerReadUser)
 	handlerForCreateUser := handler_create.NewHandlerForCreateUser(log, usersManager)
 	router.Method(http.MethodPost, "/api/v1/users/register", handlerForCreateUser)
 	handlerForUpdateNameOfUser := handler_update_name.NewHandlerForUpdateUserByName(log, usersManager)
@@ -61,8 +63,6 @@ func main() {
 	router.Method(http.MethodPut, "/api/v1/users/update/email", handlerForUpdateEmailOfUser)
 	handlerDeleteUser := handler_delete_user.NewHandlerForDeleteUser(log, usersManager)
 	router.Method(http.MethodDelete, "/api/v1/users/delete", handlerDeleteUser)
-	handlerReadUser := handler_read_user.NewHandlerForReadUser(log, usersManager)
-	router.Method(http.MethodGet, "/api/v1/user/{id_user}", handlerReadUser)
 
 	handlerReadPhotos := handler_read_photos.NewHandlerForReadPhotos(log, photosManager)
 	router.Method(http.MethodPost, "/api/v1/photos", handlerReadPhotos)

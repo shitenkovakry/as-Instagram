@@ -6,12 +6,14 @@ import (
 
 	"github.com/pkg/errors"
 )
+x
 
 type DB interface {
 	Insert(user *models.UserRegistration) (*models.UserRegistration, error)
 	UpdateName(userID int, newName string) (*models.UserRegistration, error)
 	UpdateEmail(userID int, newEmail string) (*models.UserRegistration, error)
 	DeleteUser(userID int) (*models.UserRegistration, error)
+	ReadUser(idUser int) (*models.UserRegistration, error)
 }
 
 type UsersManager struct {
@@ -60,4 +62,13 @@ func (user *UsersManager) Delete(userID int) (*models.UserRegistration, error) {
 	}
 
 	return deletedUser, nil
+}
+
+func (users *UsersManager) ReadUser(idUser int) (*models.UserRegistration, error) {
+	read, err := users.db.ReadUser(idUser)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can not read from DB")
+	}
+
+	return read, nil
 }

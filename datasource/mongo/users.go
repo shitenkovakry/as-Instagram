@@ -181,3 +181,20 @@ func (users *UsersManager) DeleteUser(userID int) (*models.UserRegistration, err
 
 	return deletedUser, nil
 }
+
+func (users *UsersManager) ReadUser(idUser int) (*models.UserRegistration, error) {
+	collectionUsers := users.db.Collection(usersCollection)
+	filter := &bson.M{
+		"id_user": idUser,
+	}
+
+	result := collectionUsers.FindOne(context.Background(), filter)
+
+	var user *models.UserRegistration
+
+	if err := result.Decode(&user); err != nil {
+		return nil, errors.Wrap(err, "can not decode user")
+	}
+
+	return user, nil
+}

@@ -32,6 +32,12 @@ curl -i -X DELETE \
   http://localhost:8080/api/v1/users/delete
 ```
 
+In order to read user, do this:
+```
+curl -i -X GET \
+  http://localhost:8080/api/v1/user/1
+```
+
 
 
 In order to read photos, do this:

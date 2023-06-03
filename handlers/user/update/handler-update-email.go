@@ -36,7 +36,7 @@ func (handler *HandlerForUpdateEmail) prepareRequest(request *http.Request) (*mo
 		return nil, err
 	}
 
-	var newNameFromClient *UpdateUserByName
+	var newNameFromClient *UpdateUserByEmail
 
 	if err := json.Unmarshal(body, &newNameFromClient); err != nil {
 		handler.log.Printf("cannot unmarshal body=%s: %v", string(body), err)
@@ -45,8 +45,8 @@ func (handler *HandlerForUpdateEmail) prepareRequest(request *http.Request) (*mo
 	}
 
 	newName := &models.UserRegistration{
-		ID:   newNameFromClient.Id,
-		Name: newNameFromClient.Name,
+		ID:    newNameFromClient.Id,
+		Email: newNameFromClient.Email,
 	}
 
 	return newName, nil

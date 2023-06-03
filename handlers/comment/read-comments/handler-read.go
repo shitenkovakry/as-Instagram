@@ -34,12 +34,6 @@ func NewHandlerForReadComments(log logger.Logger, commentsActions CommentsAction
 }
 
 func (handler *HandlerForReadComments) prepareRequest(request *http.Request) (*models.Comment, error) {
-	defer func() {
-		if err := request.Body.Close(); err != nil {
-			handler.log.Printf("cannot close body: %v", err)
-		}
-	}()
-
 	userIDParam := chi.URLParam(request, "id_user")
 	userID, err := strconv.Atoi(userIDParam)
 

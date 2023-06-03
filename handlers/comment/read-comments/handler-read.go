@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"instagram/logger"
 	models "instagram/models/comments"
-	"io"
 	"net/http"
 	"strconv"
 
@@ -55,21 +54,6 @@ func (handler *HandlerForReadComments) prepareRequest(request *http.Request) (*m
 
 	if err != nil {
 		handler.log.Printf("err = %v", err)
-
-		return nil, err
-	}
-
-	body, err := io.ReadAll(request.Body)
-	if err != nil {
-		handler.log.Printf("cannot read body: %v", err)
-
-		return nil, err
-	}
-
-	var readCommentFromClient *ReadComments
-
-	if err := json.Unmarshal(body, &readCommentFromClient); err != nil {
-		handler.log.Printf("cannot unmarshal body=%s: %v", string(body), err)
 
 		return nil, err
 	}

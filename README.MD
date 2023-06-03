@@ -91,6 +91,12 @@ curl -i -X PUT \
   http://localhost:8080/api/v1/comments/update
 ```
 
+In order to read comments, do this:
+```
+curl -i -X GET \
+  http://localhost:8080/api/v1/comments/1/1
+```
+
 
 
 

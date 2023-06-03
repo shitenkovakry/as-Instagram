@@ -141,8 +141,8 @@ func (comments *СommentsManager) UpdateComment(commentID int, newComment string
 func (comments *СommentsManager) ReadComments(userID int, photoID int) (models3.Comments, error) {
 	collectionComments := comments.db.Collection(commentsCollection)
 	filter := &bson.M{
-		"id_user":  userID,
-		"id_photo": photoID,
+		"user_id":  userID,
+		"photo_id": photoID,
 	}
 
 	cursor, err := collectionComments.Find(context.Background(), filter)

@@ -137,3 +137,24 @@ func (comments *СommentsManager) UpdateComment(commentID int, newComment string
 
 	return updatedComment, nil
 }
+
+func (comments *СommentsManager) ReadComments(userID int, photoID int) (models3.Comments, error) {
+	collectionComments := comments.db.Collection(commentsCollection)
+	filter := &bson.M{
+		"id_user":  userID,
+		"id_photo": photoID,
+	}
+
+	cursor, err := collectionComments.Find(context.Background(), filter)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can not read commentss")
+	}
+
+	var comms models3.Comments
+
+	if err := cursor.All(context.Background(), &comms); err != nil {
+		return nil, errors.Wrap(err, "can not read cursor")
+	}
+
+	return comms, nil
+}

@@ -15,6 +15,7 @@ import (
 	"instagram/datasource/mongo"
 	handler_add "instagram/handlers/comment/add-comment"
 	handler_delete_comment "instagram/handlers/comment/delete-comment"
+	handler_read_comments "instagram/handlers/comment/read-comments"
 	handler_update_comment "instagram/handlers/comment/update-comment"
 	handler_add_like "instagram/handlers/like/add-like"
 	handler_count_likes "instagram/handlers/like/count-of-likes"
@@ -79,6 +80,8 @@ func main() {
 	router.Method(http.MethodDelete, "/api/v1/comments/delete", handlerDeleteComment)
 	handlerForUpdateComment := handler_update_comment.NewHandlerForUpdateComment(log, commentsManager)
 	router.Method(http.MethodPut, "/api/v1/comments/update", handlerForUpdateComment)
+	handlerForReadComments := handler_read_comments.NewHandlerForReadComments(log, commentsManager)
+	router.Method(http.MethodGet, "/api/v1/comments/{id_user}/{id_photo}", handlerForReadComments)
 
 	handlerAddLike := handler_add_like.NewHandlerForAddLike(log, likesManager)
 	router.Method(http.MethodPost, "/api/v1/likes/add", handlerAddLike)

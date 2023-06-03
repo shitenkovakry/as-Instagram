@@ -11,6 +11,7 @@ type DB interface {
 	InsertForComment(commentOfUser *models.Comment) (*models.Comment, error)
 	DeleteComment(commentID int) (*models.Comment, error)
 	UpdateComment(commentID int, newComment string) (*models.Comment, error)
+	ReadComments(userID int, photoID int) (models.Comments, error)
 }
 
 type CommentsManager struct {
@@ -50,4 +51,13 @@ func (comment *CommentsManager) Update(commentID int, newComment string) (*model
 	}
 
 	return updatedComment, nil
+}
+
+func (comments *CommentsManager) ReadComments(userID int, photoID int) (models.Comments, error) {
+	read, err := comments.db.ReadComments(userID, photoID)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can not read")
+	}
+
+	return read, nil
 }

@@ -1,5 +1,15 @@
 # Practices
 
+### How to use?
+
+```sh
+GOOS=linux GOARCH=amd64 go build -o ./build/app/myapp ./server/main.go
+docker-compose up -d
+```
+
+then wait for the docker infra to launch.
+
+### Tests
 test address: `http://insta-test.mas3.co`
 
 ### Tests
@@ -120,7 +130,7 @@ curl -i -X DELETE \
   http://localhost:8080/api/v1/likes/delete
 ```
 
-
+Do not forget to use MongoDB Compas to see the results.
 
 curl 'http://localhost:8080/example-upload-file' \
 -X 'POST' \

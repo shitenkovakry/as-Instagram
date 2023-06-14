@@ -44,10 +44,10 @@ func main() {
 	router := chi.NewRouter()
 	log := logger.New()
 
-	usersDB := mongo.NewUsersManager(log, "", "", []string{"localhost:27017"}, "my-database")
-	photosDB := mongo.NewPhotosManager(log, "", "", []string{"localhost:27017"}, "my-database")
-	commentsDB := mongo.NewCommentsManager(log, "", "", []string{"localhost:27017"}, "my-database")
-	likesDB := mongo.NewLikeManager(log, "", "", []string{"localhost:27017"}, "my-database")
+	usersDB := mongo.NewUsersManager(log, "", "", []string{"mongodb:27017"}, "my-database")
+	photosDB := mongo.NewPhotosManager(log, "", "", []string{"mongodb:27017"}, "my-database")
+	commentsDB := mongo.NewCommentsManager(log, "", "", []string{"mongodb:27017"}, "my-database")
+	likesDB := mongo.NewLikeManager(log, "", "", []string{"mongodb:27017"}, "my-database")
 
 	usersManager := users.New(log, usersDB)
 	photosManager := photos.New(log, photosDB)

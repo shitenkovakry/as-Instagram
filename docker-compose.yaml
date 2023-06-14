@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  app1:
+    build: ./build/app
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/myapp
+
+  app2:
+    build: ./build/app
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/myapp
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  nginx:
+    build: ./build/nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app1
+      - app2

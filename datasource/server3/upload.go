@@ -1,4 +1,4 @@
-package uploadfile
+package server3
 
 import (
 	"fmt"

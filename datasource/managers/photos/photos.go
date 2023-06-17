@@ -40,22 +40,11 @@ func (photos *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
 	return read, nil
 }
 
-// const (
-// 	basePath = "./photos"
-// )
-
 func (photos *PhotosManager) ReadPhoto(idUser int, idPhoto int) ([]byte, error) {
 	photo, err := photos.db.ReadPhoto(idUser, idPhoto)
 	if err != nil {
 		return nil, errors.Wrapf(err, "can not read from DB")
 	}
-
-	// path := fmt.Sprintf("%s/%s", basePath, read.Path)
-
-	// data, err := os.ReadFile(path)
-	// if err != nil {
-	// 	return nil, errors.Wrapf(err, "can not read the photo from the file system")
-	// }
 
 	data, err := readFileFromServer3(photo.Path, idUser)
 	if err != nil {

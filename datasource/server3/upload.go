@@ -18,6 +18,8 @@ type FileManager struct {
 }
 
 func (fileManager *FileManager) Upload(userID int, photoContent []byte, photoFilename string) error {
+	os.Mkdir(fmt.Sprintf("%s/%d", basePath, userID), os.ModePerm)
+
 	path := fmt.Sprintf("%s/%d/%s", basePath, userID, photoFilename)
 
 	if err := os.WriteFile(path, photoContent, os.ModePerm); err != nil {

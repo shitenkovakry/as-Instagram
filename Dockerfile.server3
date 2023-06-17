@@ -4,6 +4,9 @@ FROM golang:1.19
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /go/src/app
 
+# Создай папку photos
+RUN mkdir photos
+
 # Копируем исходный код в контейнер
 COPY . .
 
@@ -11,7 +14,7 @@ COPY . .
 RUN go mod download
 
 # Собираем приложение
-RUN go build ./server/instagram/main.go
+RUN go build ./server/photos/main.go
 
 # Задаем команду, которая будет запускаться при старте контейнера
 CMD ["./main"]

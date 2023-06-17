@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+      - server3
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/myapp
 
@@ -16,13 +17,16 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+      - server3
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/myapp
 
-  app3:
-    build: .
+  server3:
+    build:
+      context: ./
+      dockerfile: Dockerfile.server3
     volumes:
-      - ./files:/app/files
+      - ./photos:/go/src/app/photos
 
 
   mongodb:
@@ -37,4 +41,4 @@ services:
     depends_on:
       - app1
       - app2
-      - app3
+      - server3

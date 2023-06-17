@@ -1,10 +1,13 @@
 package photos
 
 import (
+	"bytes"
 	"fmt"
 	"instagram/logger"
 	models "instagram/models/photos"
-	"os"
+	"io"
+	"log"
+	"net/http"
 
 	"github.com/pkg/errors"
 )
@@ -37,31 +40,34 @@ func (photos *PhotosManager) ReadPhotos(userID int) (models.Photos, error) {
 	return read, nil
 }
 
-const (
-	basePath = "./photos"
-)
+// const (
+// 	basePath = "./photos"
+// )
 
 func (photos *PhotosManager) ReadPhoto(idUser int, idPhoto int) ([]byte, error) {
-	read, err := photos.db.ReadPhoto(idUser, idPhoto)
+	photo, err := photos.db.ReadPhoto(idUser, idPhoto)
 	if err != nil {
 		return nil, errors.Wrapf(err, "can not read from DB")
 	}
 
-	path := fmt.Sprintf("%s/%s", basePath, read.Path)
+	// path := fmt.Sprintf("%s/%s", basePath, read.Path)
 
-	data, err := os.ReadFile(path)
+	// data, err := os.ReadFile(path)
+	// if err != nil {
+	// 	return nil, errors.Wrapf(err, "can not read the photo from the file system")
+	// }
+
+	data, err := readFileFromServer3(photo.Path, idUser)
 	if err != nil {
-		return nil, errors.Wrapf(err, "can not read the photo from the file system")
+		return nil, errors.Wrapf(err, "can not read the photo from the external server")
 	}
 
 	return data, nil
 }
 
 func (photo *PhotosManager) Add(userID int, photoContent []byte, photoFilename string) (*models.Photo, error) {
-	path := fmt.Sprintf("%s/%s", basePath, photoFilename)
-
-	if err := os.WriteFile(path, photoContent, os.ModePerm); err != nil {
-		return nil, errors.Wrap(err, "cannot save photo content")
+	if err := sendFileToServer3(photoFilename, photoContent, userID); err != nil {
+		return nil, err
 	}
 
 	insertedPhoto, err := photo.db.InsertForPhoto(userID, photoFilename)
@@ -79,4 +85,49 @@ func (photo *PhotosManager) Delete(photoID int) (*models.Photo, error) {
 	}
 
 	return deletedPhoto, nil
+}
+
+func sendFileToServer3(photoFilename string, photoContent []byte, userID int) error {
+	response, err := http.Post(
+		fmt.Sprintf("http://server3:8080/upload/%d/%s", userID, photoFilename),
+		"application/octet-stream",
+		bytes.NewBuffer(photoContent),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return errors.New("something went wrong")
+	}
+
+	return nil
+}
+
+func readFileFromServer3(photoFilename string, userID int) ([]byte, error) {
+	response, err := http.Get(
+		fmt.Sprintf("http://server3:8080/download/%d/%s", userID, photoFilename),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New("something went wrong")
+	}
+
+	defer func() {
+		if err := response.Body.Close(); err != nil {
+			log.Printf("cannot close body in readFileFromServer3:%v", err)
+		}
+	}()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
 }
